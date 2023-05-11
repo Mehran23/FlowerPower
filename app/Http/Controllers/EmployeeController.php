@@ -14,7 +14,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::all();
-        $orders = Order::all();
+        $orders = Order::where('status', '!=', 'open')->get();
 
         return view('employee.index', compact('employees', 'orders'));
     }

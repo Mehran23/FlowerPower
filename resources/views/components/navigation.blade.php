@@ -19,6 +19,7 @@
             </div>
             <div class="flex items-center">
                 @auth
+                <a href="{{ route('profile.edit') }}" class="text-black hover:bg-white hover:text-black px-3 py-2 rounded-md text-sm font-medium">Profiel</a>
                 <a href="{{ route('order.show') }}" class="text-black hover:bg-white hover:text-black px-3 py-2 rounded-md text-sm font-medium">Winkelwagen</a>
                 @endauth
                 @if (Auth::guard('web')->check() || Auth::guard('employee')->check())

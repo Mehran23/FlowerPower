@@ -35,7 +35,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/order/add', [OrderController::class, 'add'])->name('order.add');
@@ -56,9 +56,13 @@ Route::middleware(['auth:employee'])->group(function () {
 
     Route::get('/employee/create', [EmployeeController::class, 'create'])->name('employee.create');
     Route::post('/employee', [EmployeeController::class, 'store'])->name('employee.store');
-    Route::get('/employee/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
+    Route::get('/employee/edit/{employee}', [EmployeeController::class, 'edit'])->name('employee.edit');
     Route::post('/employee/edit/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
     Route::delete('/employee/{employee}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+
+    Route::get('/employee/order/show/{order}', [OrderController::class, 'employeeShow'])->name('employee.order.show');
+    Route::get('/employee/order/close/{order}', [OrderController::class, 'close'])->name('employee.order.close');
+    Route::get('/employee/order/open/{order}', [OrderController::class, 'open'])->name('employee.order.open');
 
     // Voeg hier eventuele extra routes toe die alleen toegankelijk zijn voor medewerkers
 });

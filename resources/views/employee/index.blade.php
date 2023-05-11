@@ -21,7 +21,7 @@
                                         <td class="border border-black px-4 py-2">{{ $employee->name }}</td>
                                         <td class="border border-black px-4 py-2">{{ $employee->email }}</td>
                                         <td class="border border-black px-4 py-2 flex justify-between">
-                                            <a href="{{ route('employee.edit', $employee->id) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Bewerken</a>
+                                            <a href="{{ route('employee.edit', ['employee' => $employee->id]) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Bewerken</a>
                                             <form action="{{ route('employee.destroy', $employee->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
@@ -43,31 +43,31 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-yellow-50  border border-black rounded-lg">
                         <h1 class="text-3xl font-semibold mb-4">{{ __('Lijst van bestellingen') }}</h1>
-                        <table class="table-auto w-full">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-2">Factuurnummer</th>
-                                    <th class="px-4 py-2">Klantnaam</th>
-                                    <th class="px-4 py-2">Totaalbedrag</th>
-                                    <th class="px-4 py-2">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($orders as $order)
+                            <table class="table-auto w-full">
+                                <thead>
                                     <tr>
-                                        <td class="border border-black px-4 py-2">{{ $order->id }}</td>
-                                        <td class="border border-black px-4 py-2">{{ $order->user->first_name }}</td>
-                                        <td class="border border-black px-4 py-2">
-                                        @php
+                                        <th class="px-4 py-2">Factuurnummer</th>
+                                        <th class="px-4 py-2">Klantnaam</th>
+                                        <th class="px-4 py-2">Totaalbedrag</th>
+                                        <th class="px-4 py-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($orders as $order)
+                                        <tr>
+                                            <td class="border border-black px-4 py-2"><a class="text-blue-600 underline" href="{{ route('employee.order.show', $order->id) }}">{{ $order->id }}</a></td>
+                                            <td class="border border-black px-4 py-2">{{ $order->user->first_name }}</td>
+                                            <td class="border border-black px-4 py-2">
+                                            @php
                                                 $totalAmount = 0;
                                                 foreach ($order->products as $product) {
                                                     $totalAmount += $product->price * $product->pivot->quantity;
                                                 }
                                             @endphp
                                             €{{ $totalAmount }}
-                                        </td>
-                                        <td class="border border-black px-4 py-2 @if ($order->status == 'open') bg-green-500 @else bg-red-500 @endif">{{ $order->status }}</td>
-                                    </tr>
+                                            </td>
+                                            <td class="border border-black px-4 py-2 @if ($order->status == 'open') bg-green-500 @elseif($order->status == 'processing') bg-orange-500 @else bg-red-500 @endif">{{ $order->status }}</td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>

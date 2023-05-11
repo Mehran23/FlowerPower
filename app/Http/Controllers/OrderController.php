@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -77,6 +79,19 @@ class OrderController extends Controller
         return view('order.show', compact('order', 'total'));
     }
 
+    public function employeeShow(Order $order)
+    {
+        $total = 0;
+
+        foreach($order->products as $product) {
+            $total = $total + $product->price  * $product->pivot->quantity;
+        }
+
+        $user = User::find($order->user_id);
+
+        return view('employee.order', compact('order', 'total', 'user'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -105,7 +120,7 @@ class OrderController extends Controller
 
     public function order(Order $order)
     {
-        $order->status = 'closed';
+        $order->status = 'processing';
         $order->save();
 
         $total = 0;
@@ -115,5 +130,27 @@ class OrderController extends Controller
         }
 
         return view('order.invoice', compact('order', 'total'));
+    }
+
+    public function close(Order $order)
+    {
+        $order->status = 'closed';
+        $order->save();
+
+        $employees = Employee::all();
+        $orders = Order::where('status', '!=', 'open')->get();
+
+        return view('employee.index', compact('employees', 'orders'));
+    }
+
+    public function open(Order $order)
+    {
+        $order->status = 'processing';
+        $order->save();
+
+        $employees = Employee::all();
+        $orders = Order::where('status', '!=', 'open')->get();
+
+        return view('employee.index', compact('employees', 'orders'));
     }
 }
