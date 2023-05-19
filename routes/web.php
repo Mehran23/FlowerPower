@@ -63,6 +63,7 @@ Route::middleware(['auth:employee'])->group(function () {
     Route::get('/employee/order/show/{order}', [OrderController::class, 'employeeShow'])->name('employee.order.show');
     Route::get('/employee/order/close/{order}', [OrderController::class, 'close'])->name('employee.order.close');
     Route::get('/employee/order/open/{order}', [OrderController::class, 'open'])->name('employee.order.open');
+    Route::delete('/employee/orders/{order}', [OrderController::class, 'destroy'])->name('employee.order.destroy');
 
     // Voeg hier eventuele extra routes toe die alleen toegankelijk zijn voor medewerkers
 });

@@ -50,6 +50,13 @@
                         @else
                         <a href="{{ route('employee.order.close', ['order' => $order->id]) }}" class="mt-10 inline-block items-center justify-center rounded-md border border-black rounded-lg bg-yellow-200 py-2 px-4 text-base font-medium text-black hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Bestelling afronden</a>
                         @endif
+                        @if($order->status == 'closed')
+                        <form action="{{ route('employee.order.destroy', ['order' => $order->id]) }}" method="POST" class="mt-4">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-block items-center justify-center rounded-md border border-black rounded-lg bg-red-200 py-2 px-4 text-base font-medium text-black hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Bestelling verwijderen</button>
+                        </form>
+                        @endif
                     </div>
                 </div>
             </div>

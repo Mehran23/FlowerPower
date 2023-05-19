@@ -113,10 +113,21 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        $order->delete();
+        // Controleer of de bestelling een afgeronde status heeft
+        if ($order->status == 'closed') {
+            // Verwijder de bestelling en gerelateerde gegevens
+            $order->products()->detach();
+            $order->delete();
 
-        return redirect()->route('order.show');
+            // Voer eventuele andere nodige acties uit
+
+            return redirect()->route('employee.index')->with('success', 'Bestelling is succesvol verwijderd.');
     }
+
+            // Als de bestelling geen afgeronde status heeft, geef dan een foutmelding weer of redirect naar een andere pagina
+            return redirect()->route('employee.index')->with('error', 'Kan alleen afgeronde bestellingen verwijderen.');
+    }
+
 
     public function order(Order $order)
     {
